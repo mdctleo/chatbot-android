@@ -46,12 +46,7 @@ class MainActivity : ComponentActivity() {
 fun WebViewComposable(url: String) {
     AndroidView(factory = { context ->
         WebView(context).apply {
-            webViewClient = object : WebViewClient() {
-                override fun onPageFinished(view: WebView?, url: String?) {
-                    super.onPageFinished(view, url)
-                    Log.d("WebView", "Loaded URL: $url")
-                }
-            }
+            webViewClient = WebViewClient()
             webChromeClient = object : WebChromeClient() {
                 override fun onPermissionRequest(request: PermissionRequest?) {
                     request?.grant(request.resources)
