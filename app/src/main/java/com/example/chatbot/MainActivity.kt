@@ -1,5 +1,6 @@
 package com.example.chatbot
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,11 +15,22 @@ import com.example.chatbot.ui.theme.ChatbotTheme
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import android.Manifest
+import android.util.Log
+import android.webkit.PermissionRequest
+import android.webkit.WebChromeClient
 import com.example.chatbot.BuildConfig
 
 class MainActivity : ComponentActivity() {
+    private val RECORD_AUDIO_REQUEST_CODE = 101
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), RECORD_AUDIO_REQUEST_CODE)
+        }
+
         setContent {
             ChatbotTheme {
                 // A surface container using the 'background' color from the theme
@@ -34,9 +46,20 @@ class MainActivity : ComponentActivity() {
 fun WebViewComposable(url: String) {
     AndroidView(factory = { context ->
         WebView(context).apply {
-            webViewClient = WebViewClient()
+            webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    Log.d("WebView", "Loaded URL: $url")
+                }
+            }
+            webChromeClient = object : WebChromeClient() {
+                override fun onPermissionRequest(request: PermissionRequest?) {
+                    request?.grant(request.resources)
+                }
+            }
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
+            settings.mediaPlaybackRequiresUserGesture = false
             loadUrl(url)
         }
     })
