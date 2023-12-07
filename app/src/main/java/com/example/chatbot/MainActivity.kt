@@ -90,7 +90,7 @@ fun WebViewComposable(url: String) {
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
             settings.mediaPlaybackRequiresUserGesture = false
-            addJavascriptInterface(WebAppInterface(context), "Android")
+            addJavascriptInterface(WebAppInterface(context), "AndroidBridge")
             loadUrl(url)
         }
     })
