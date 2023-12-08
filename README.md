@@ -9,7 +9,15 @@ DEBUG_INDEX_PAGE=
 PRODUCTION_INDEX_PAGE=
 ```
 
-`PRODUCTION_INDEX_PAGE` doesn't do anything right now, `DEBUG_INDEX_PAGE` will point towards your local host server to view the webpage.
+To test with production please set both variables to
+
+```
+DEBUG_INDEX_PAGE=https://frontend-cs536.escglobal.co/
+PRODUCTION_INDEX_PAGE=https://frontend-cs536.escglobal.co/
+```
+
+## The following steps are for debugging using a local chatbot-server, which will only work with http
+
 
 To view the webpage, I recommend using something like [ngrok](https://ngrok.com/) to expose your localhost.
 
